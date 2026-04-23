@@ -13,7 +13,7 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 // ── Global middleware ─────────────────────────────────────
 app.use(cors({
-  origin: "https://conference-reviewer-frontend.vercel.app",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
 app.use(express.json());
