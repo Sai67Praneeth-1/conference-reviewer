@@ -12,8 +12,21 @@ const uploadDir = path.join(__dirname, process.env.UPLOAD_DIR || 'uploads');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 // ── Global middleware ─────────────────────────────────────
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://conference-reviewer-frontend.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5173'
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
